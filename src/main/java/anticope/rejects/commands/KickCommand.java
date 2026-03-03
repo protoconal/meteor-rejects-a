@@ -18,23 +18,23 @@ public class KickCommand extends Command {
     }
 
     private static void shutdown() throws Exception {
-        String cmd;
+        String[] cmd;
         if (SystemUtils.IS_OS_AIX)
-            cmd = "shutdown -Fh 0";
+            cmd = new String[]{"shutdown", "-Fh", "0"};
         else if (SystemUtils.IS_OS_FREE_BSD || SystemUtils.IS_OS_LINUX || SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_MAC_OSX || SystemUtils.IS_OS_NET_BSD || SystemUtils.IS_OS_OPEN_BSD || SystemUtils.IS_OS_UNIX)
-            cmd = "shutdown -h now";
+            cmd = new String[]{"shutdown", "-h", "now"};
         else if (SystemUtils.IS_OS_HP_UX)
-            cmd = "shutdown -hy 0";
+            cmd = new String[]{"shutdown", "-hy", "0"};
         else if (SystemUtils.IS_OS_IRIX)
-            cmd = "shutdown -y -g 0";
+            cmd = new String[]{"shutdown", "-y", "-g", "0"};
         else if (SystemUtils.IS_OS_SOLARIS || SystemUtils.IS_OS_SUN_OS)
-            cmd = "shutdown -y -i5 -g 0";
+            cmd = new String[]{"shutdown", "-y", "-i5", "-g", "0"};
         else if (SystemUtils.IS_OS_WINDOWS)
-            cmd = "shutdown.exe /s /t 0";
+            cmd = new String[]{"shutdown.exe", "/s", "/t", "0"};
         else
             throw new Exception("Unsupported operating system.");
 
-        Runtime.getRuntime().exec(cmd);
+        new ProcessBuilder(cmd).start();
     }
 
     @Override
