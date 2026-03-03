@@ -10,6 +10,7 @@ import meteordevelopment.meteorclient.utils.misc.NbtException;
 import net.minecraft.client.User;
 import net.minecraft.nbt.CompoundTag;
 
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
@@ -22,6 +23,15 @@ public class CustomYggdrasilAccount extends Account<CustomYggdrasilAccount> {
         super(AccountType.Cracked, name);
         this.password = password;
         this.server = server;
+    }
+
+    public static boolean isValidServerUrl(String server) {
+        try {
+            URI uri = new URI(server);
+            return "https".equalsIgnoreCase(uri.getScheme());
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
