@@ -35,6 +35,9 @@ public class AddCustomYggdrasilAccountScreen extends AddAccountScreen {
         // Add
         add = t.add(theme.button("Add")).expandX().widget();
         add.action = () -> {
+            if (!server.get().startsWith("https://")) {
+                return;
+            }
             CustomYggdrasilAccount account = new CustomYggdrasilAccount(username.get(), password.get(), server.get());
             if (!username.get().isEmpty() && !password.get().isEmpty() && !Accounts.get().exists(account)) {
                 AccountsScreen.addAccount(this, parent, account);

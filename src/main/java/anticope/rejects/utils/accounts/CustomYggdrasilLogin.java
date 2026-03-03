@@ -30,6 +30,9 @@ public class CustomYggdrasilLogin {
     public static Environment localYggdrasilApi = new Environment("/authserver", "/sessionserver", "/minecraftservices", "Custom-Yggdrasil");
 
     public static User login(String name, String password, String server) throws AuthenticationException {
+        if (!server.startsWith("https://")) {
+            throw new AuthenticationException("Server URL must use HTTPS to protect credentials");
+        }
         try {
             String url = server + "/authserver/authenticate";
             JsonObject agent = new JsonObject();

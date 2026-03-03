@@ -10,6 +10,9 @@ import meteordevelopment.meteorclient.utils.misc.NbtException;
 import net.minecraft.client.User;
 import net.minecraft.nbt.CompoundTag;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
 import static meteordevelopment.meteorclient.MeteorClient.mc;
 
 public class CustomYggdrasilAccount extends Account<CustomYggdrasilAccount> {
@@ -59,8 +62,9 @@ public class CustomYggdrasilAccount extends Account<CustomYggdrasilAccount> {
     public CompoundTag toTag() {
         CompoundTag tag = super.toTag();
 
-        tag.putString("password", password);
+        tag.putString("password", Base64.getEncoder().encodeToString(password.getBytes(StandardCharsets.UTF_8)));
         tag.putString("server", server);
+        tag.putBoolean("encoded", true);
 
         return tag;
     }
@@ -70,7 +74,13 @@ public class CustomYggdrasilAccount extends Account<CustomYggdrasilAccount> {
         super.fromTag(tag);
         if (!tag.contains("password")) throw new NbtException();
 
-        password = tag.getString("password").orElse("");
+        String rawPassword = tag.getString("password").orElse("");
+        boolean encoded = tag.getBoolean("encoded").orElse(false);
+        if (encoded) {
+            password = new String(Base64.getDecoder().decode(rawPassword), StandardCharsets.UTF_8);
+        } else {
+            password = rawPassword;
+        }
         server = tag.getString("server").orElse("");
 
         return this;
